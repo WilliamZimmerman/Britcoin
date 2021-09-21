@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Sep  5 11:10:13 2021
+
+@author: Ben
+"""
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from datetime import datetime
+import re
+from alpha_vantage.techindicators import TechIndicators
+from alpha_vantage.cryptocurrencies import CryptoCurrencies
+import plotly.express as px
+
+cc = CryptoCurrencies(key='UZQZ8SF1KB1PRBC0', output_format='pandas')
+
+BTC_to_CAD_Daily, BTC_CAD_Meta = cc.get_digital_currency_daily("BTC", "CAD")
+#get daily price data of BTC and convert to CAD
+
+BTC_to_CAD_Daily.columns = [c[3:] for c in BTC_to_CAD_Daily.columns]
+#fix the headings of the columns, but there's still a wierd space before the first characters of some columns
+
+ti = TechIndicators(key="UZQZ8SF1KB1PRBC0", output_format='pandas')
+
+rsi_data, rsi_meta = ti.get_rsi("BTCCAD")
+macd_data, macd_meta = ti.get_macd("BTCCAD")
+
+#BTC_to_CAD_Daily.to_csv("BTC_to_CAD_Daily")
+
+#for i in x:
+    #i=str(i)
+    #i=i.replace("-",'/')
+    #i=datetime.strptime(i,'%Y/%m/%d')
+
+def GraphTechnical(indicator_df, y_label, plot_title):
+    
+    fig = px.line(indicator_df, x=indicator_df.index, y=y_label, title=plot_title)
+    fig.update_xaxes(type="date")
+    fig.show() 
+
+
+#y=list(rsi_data.values())
+
+
+#ylist=[]
+#for i in range(0,len(y)):
+    #j=list(y[i].values())
+   
+    #ylist.append(float(j[0]))
+    
+    
+
+#plt.plot(x,ylist)
+#plt.show()
